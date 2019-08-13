@@ -1,29 +1,24 @@
 import React, { useState } from "react";
 
 import { FormValues } from "./types";
+import Field from "./Field";
 
 const App: React.FC = () => {
   const [state, setState] = useState<FormValues>({});
 
   return (
     <form>
-      <input
-        type="email"
+      <Field
         name="email"
-        value={state.email || ""}
-        onChange={e => {
-          e.persist();
-          setState(state => ({ ...state, [e.target.name]: e.target.value }));
-        }}
+        type="email"
+        formState={state}
+        setFormState={setState}
       />
-      <input
+      <Field
         type="password"
         name="password"
-        value={state.password || ""}
-        onChange={e => {
-          e.persist();
-          setState(state => ({ ...state, [e.target.name]: e.target.value }));
-        }}
+        formState={state}
+        setFormState={setState}
       />
       <button type="submit">Submit</button>
     </form>
