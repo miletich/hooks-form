@@ -1,35 +1,37 @@
 import React, { useCallback } from "react";
 
-import { FormValues } from "./types";
+import { FormContext } from "./types";
+import withFormContext from "./withFormContext";
 
-type Props = {
-  formState: FormValues;
+type ExternalProps = {
   name: string;
   type: string;
-  setFormState: (value: React.SetStateAction<FormValues>) => void;
 };
 
+type Props = ExternalProps & FormContext;
+
 const Field: React.FC<Props> = React.memo(
-  ({ name, type, formState, setFormState }) => {
+  ({ name, type, formValues, setFormValues }) => {
     const handleChange = useCallback(
       (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
-        setFormState(state => ({ ...state, [e.target.name]: e.target.value }));
+        setFormValues(state => ({ ...state, [e.target.name]: e.target.value }));
       },
-      [formState[name]]
+      [setFormValues]
     );
 
     return (
       <input
         name={name}
         type={type}
-        value={formState[name] || ""}
+        value={formValues[name] || ""}
         onChange={handleChange}
       />
     );
   },
   (prevProps, nextProps) =>
-    prevProps.formState[prevProps.name] === nextProps.formState[nextProps.name]
+    prevProps.formValues[prevProps.name] ===
+    nextProps.formValues[nextProps.name]
 );
 
-export default Field;
+export default withFormContext<ExternalProps, React.ElementType<Props>>(Field);
