@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-type FormValues = { [key: string]: string };
+import { FormValues } from "./types";
 
 const App: React.FC = () => {
   const [state, setState] = useState<FormValues>({});
