@@ -21,9 +21,15 @@ const validatePassword = composeValidators(
 
 const App: React.FC = () => (
   <Form>
-    <Field name="email" type="email" validate={validateEmail} />
-    <Field type="password" name="password" validate={validatePassword} />
-    <button type="submit">Submit</button>
+    {isSubmittable => (
+      <>
+        <Field name="email" type="email" validate={validateEmail} />
+        <Field type="password" name="password" validate={validatePassword} />
+        <button type="submit" disabled={!isSubmittable}>
+          Submit
+        </button>
+      </>
+    )}
   </Form>
 );
 
