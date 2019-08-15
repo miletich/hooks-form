@@ -8,14 +8,7 @@ const withFormContext = <Props, Instance>(
 ) =>
   React.forwardRef<Instance, Props>((props, ref) => (
     <FormContextConsumer>
-      {({ formValues, setFormValues }) => (
-        <Component
-          {...props}
-          ref={ref}
-          formValues={formValues}
-          setFormValues={setFormValues}
-        />
-      )}
+      {formContext => <Component {...props} {...formContext} ref={ref} />}
     </FormContextConsumer>
   ));
 

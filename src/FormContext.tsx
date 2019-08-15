@@ -4,7 +4,9 @@ import { FormContext } from "./types";
 
 const formContext: FormContext = {
   formValues: {},
-  setFormValues: () => undefined
+  setFormValues: () => undefined,
+  formErrors: {},
+  setFormErrors: () => undefined
 };
 
 const { Provider, Consumer } = React.createContext<FormContext>(formContext);

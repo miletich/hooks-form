@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 
-import { FormValues } from "./types";
+import { FormValues, FormErrors } from "./types";
 import { FormContextProvider } from "./FormContext";
 
 const Form: React.FC = ({ children }) => {
-  const [state, setState] = useState<FormValues>({});
+  const [formValues, setFormValues] = useState<FormValues>({});
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
 
   return (
     <form>
       <FormContextProvider
-        value={{ formValues: state, setFormValues: setState }}
+        value={{ formValues, setFormValues, formErrors, setFormErrors }}
       >
         {children}
       </FormContextProvider>

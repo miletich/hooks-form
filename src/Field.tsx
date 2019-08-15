@@ -1,32 +1,54 @@
 import React, { useCallback } from "react";
 
-import { FormContext } from "./types";
+import { FormContext, FormValidator } from "./types";
 import withFormContext from "./withFormContext";
 
 type ExternalProps = {
   name: string;
   type: string;
+  validate?: FormValidator;
 };
 
 type Props = ExternalProps & FormContext;
 
 const Field: React.FC<Props> = React.memo(
-  ({ name, type, formValues, setFormValues }) => {
+  ({
+    name,
+    type,
+    formValues,
+    setFormValues,
+    formErrors,
+    setFormErrors,
+    validate
+  }) => {
     const handleChange = useCallback(
       (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
-        setFormValues(state => ({ ...state, [e.target.name]: e.target.value }));
+        const fieldName = e.target.name;
+        const fieldValue = e.target.value;
+        setFormValues(state => ({ ...state, [fieldName]: fieldValue }));
+        validate &&
+          setFormErrors(state => ({
+            ...state,
+            [fieldName]: validate(fieldValue)
+          }));
       },
-      [setFormValues]
+      [setFormValues, setFormErrors, validate]
     );
 
     return (
-      <input
-        name={name}
-        type={type}
-        value={formValues[name] || ""}
-        onChange={handleChange}
-      />
+      <>
+        <input
+          name={name}
+          type={type}
+          value={formValues[name] || ""}
+          onChange={handleChange}
+          onBlur={handleChange}
+        />
+        {formErrors[name] &&
+          formErrors[name].length > 0 &&
+          formErrors[name].map(error => <p key={String(error)}>{error}</p>)}
+      </>
     );
   },
   (prevProps, nextProps) =>
