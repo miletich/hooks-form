@@ -21,10 +21,14 @@ const validatePassword = composeValidators(
 
 const App: React.FC = () => (
   <Form>
-    {isSubmittable => (
+    {({ isSubmittable, values }) => (
       <>
         <Field name="email" type="email" validate={validateEmail} />
         <Field type="password" name="password" validate={validatePassword} />
+        <Field type="number" name="age" />
+        {values && values.age < 18 && (
+          <Field type="email" name="parentsEmail" validate={validateEmail} />
+        )}
         <button type="submit" disabled={!isSubmittable}>
           Submit
         </button>

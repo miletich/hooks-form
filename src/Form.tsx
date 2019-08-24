@@ -3,8 +3,13 @@ import React, { useState } from "react";
 import { FormValues, FormErrors } from "./types";
 import { FormContextProvider } from "./FormContext";
 
+type RenderProps = {
+  isSubmittable?: boolean;
+  values?: FormValues;
+};
+
 type Props = {
-  children: (isSubmittable: boolean) => React.ReactNode;
+  children: ({ values, isSubmittable }: RenderProps) => React.ReactNode;
 };
 
 const Form: React.FC<Props> = ({ children }) => {
@@ -20,7 +25,7 @@ const Form: React.FC<Props> = ({ children }) => {
       <FormContextProvider
         value={{ formValues, setFormValues, formErrors, setFormErrors }}
       >
-        {children && children(isSubmittable)}
+        {children && children({ isSubmittable, values: formValues })}
       </FormContextProvider>
     </form>
   );
