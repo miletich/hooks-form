@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 
-import { FormValues, FormErrors } from "./types";
+import { FormValues, FormErrors, FormContext } from "./types";
 import { FormContextProvider } from "./FormContext";
 
-type RenderProps = {
-  isSubmittable?: boolean;
+type RenderProp = (values: {
   values?: FormValues;
-};
+  isSubmittable?: boolean;
+}) => React.ReactElement;
 
 type Props = {
-  children: ({ values, isSubmittable }: RenderProps) => React.ReactNode;
+  children: RenderProp;
 };
 
 const Form: React.FC<Props> = ({ children }) => {
@@ -17,15 +17,20 @@ const Form: React.FC<Props> = ({ children }) => {
   const [formErrors, setFormErrors] = useState<FormErrors>({});
 
   const isFormValid = !Object.values(formErrors).flat().length;
-  const isFormPristine = Object.values(formValues).flat().length === 0;
+  const isFormPristine = Object.values(formValues).length === 0;
   const isSubmittable = isFormValid && !isFormPristine;
+
+  const formContext: FormContext = {
+    formValues,
+    setFormValues,
+    formErrors,
+    setFormErrors
+  };
 
   return (
     <form>
-      <FormContextProvider
-        value={{ formValues, setFormValues, formErrors, setFormErrors }}
-      >
-        {children && children({ isSubmittable, values: formValues })}
+      <FormContextProvider value={formContext}>
+        {children({ values: formValues, isSubmittable })}
       </FormContextProvider>
     </form>
   );

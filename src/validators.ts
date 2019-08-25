@@ -31,3 +31,8 @@ export const hasUppercaseCharacter: FormValidator = value =>
   typeof value === "string" && /[A-Z]/.test(value)
     ? []
     : ["It must include at least a single uppercase letter"];
+
+export const isSameAs: <T extends FormValue>(
+  referenceFieldValue: T
+) => FormValidator = referenceFieldValue => value =>
+  referenceFieldValue === value ? [] : ["Entered values must match"];
